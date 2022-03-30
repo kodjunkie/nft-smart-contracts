@@ -1,41 +1,41 @@
 {
-  "name": "nft-smart-contracts",
-  "version": "1.0.0",
-  "description": "ERC721 and the famous ERC721A (gas optimised) contract implementation.",
-  "main": "truffle-config.js",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kodjunkie/nft-smart-contracts.git"
-  },
-  "keywords": [
-    "NFT",
-    "NFTs",
-    "Smart",
-    "Contracts",
-    "ERC721",
-    "ERC721A"
-  ],
-  "author": "lawrence Onah <paplow01@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/kodjunkie/nft-smart-contracts/issues"
-  },
-  "homepage": "https://github.com/kodjunkie/nft-smart-contracts#readme",
-  "dependencies": {
-    "@openzeppelin/contracts": "^4.5.0",
-    "@truffle/hdwallet-provider": "^2.0.4"
-  },
-  "devDependencies": {
-    "@openzeppelin/test-helpers": "^0.5.15",
-    "prettier": "^2.6.1",
-    "prettier-plugin-solidity": "^1.0.0-beta.19",
-    "solhint": "^3.3.7",
-    "solhint-plugin-prettier": "^0.0.5"
-  }
+	"name": "nft-smart-contracts",
+	"version": "1.0.0",
+	"description": "ERC721 and the famous ERC721A (gas optimised) contract implementation.",
+	"main": "truffle-config.js",
+	"directories": {
+		"test": "test"
+	},
+	"scripts": {
+		"prettier:sol": "prettier --write contracts/**/*.sol"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kodjunkie/nft-smart-contracts.git"
+	},
+	"keywords": [
+		"NFT",
+		"NFTs",
+		"Smart",
+		"Contracts",
+		"ERC721",
+		"ERC721A"
+	],
+	"author": "lawrence Onah <paplow01@gmail.com>",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/kodjunkie/nft-smart-contracts/issues"
+	},
+	"homepage": "https://github.com/kodjunkie/nft-smart-contracts#readme",
+	"dependencies": {
+		"@openzeppelin/contracts": "^4.5.0",
+		"@truffle/hdwallet-provider": "^2.0.4"
+	},
+	"devDependencies": {
+		"@openzeppelin/test-helpers": "^0.5.15",
+		"prettier": "^2.6.1",
+		"prettier-plugin-solidity": "^1.0.0-beta.19",
+		"solhint": "^3.3.7",
+		"solhint-plugin-prettier": "^0.0.5"
+	}
 }
