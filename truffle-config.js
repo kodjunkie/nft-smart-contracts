@@ -19,11 +19,8 @@
  */
 
 const path = require("path");
-const HDWalletProvider = require("@truffle/hdwallet-provider");
-
-const fs = require("fs");
 const config = require("./config");
-const mnemonic = fs.readFileSync(".mnemonic").toString().trim();
+const HDWalletProvider = require("@truffle/hdwallet-provider");
 
 module.exports = {
 	// See <http://truffleframework.com/docs/advanced/configuration>
@@ -53,7 +50,7 @@ module.exports = {
 			network_id: config.network_id, // Any network (default: none)
 		},
 		// Use third-party wallets to sign transactions
-		advanced: {
+		wallet: {
 			network_id: config.network_id, // Custom network
 			gas: 8500000, // Gas sent with each transaction (default: ~6700000)
 			gasPrice: 100000000000, // (default: 100 gwei)
@@ -65,15 +62,19 @@ module.exports = {
 					addressIndex: 0,
 				}),
 		},
+		// Using truffle dashboard with third-party wallets
+		dashboard: {
+			port: 25012,
+			host: config.host,
+		},
 		// Useful for deploying to a public network.
 		// NB: It's important to wrap the provider as a function.
-		// ropsten: {
 		rinkeby: {
 			network_id: 4,
 			provider: () =>
 				new HDWalletProvider({
-					mnemonic: process.env.MNEMONIC,
-					providerOrUrl: "wss://rinkeby.infura.io/ws/v3/ab97c045f3ce4f3687088845c7895690",
+					mnemonic: config.mnemonic,
+					providerOrUrl: `wss://rinkeby.infura.io/ws/v3/${config.infura.rinkeby}`,
 					addressIndex: 0,
 				}),
 			confirmations: 10,
@@ -90,9 +91,9 @@ module.exports = {
 	},
 
 	// Set default mocha options here, use special reporters etc.
-	mocha: {
-		// timeout: 100000
-	},
+	// mocha: {
+	// timeout: 100000
+	// },
 
 	// Configure your compilers
 	compilers: {
