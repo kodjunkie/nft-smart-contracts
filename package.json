@@ -1,7 +1,7 @@
 {
 	"name": "nft-smart-contracts",
 	"version": "1.0.0",
-	"description": "ERC721 and the famous ERC721A (gas optimised) contract implementation.",
+	"description": "Gas optimised NFT smart contracts.",
 	"directories": {
 		"test": "test"
 	},
@@ -23,7 +23,7 @@
 		"ERC721",
 		"ERC721A"
 	],
-	"author": "lawrence Onah <paplow01@gmail.com>",
+	"author": "Lawrence Onah <paplow01@gmail.com>",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/kodjunkie/nft-smart-contracts/issues"
