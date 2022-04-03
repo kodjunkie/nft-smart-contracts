@@ -89,12 +89,12 @@ contract ERC721Whitelist is ERC721, Ownable {
 		}
 	}
 
-	// Activate whitelist sale
+	// Toggle whitelist sales activity
 	function toggleWlMintActive() public onlyOwner {
 		wlMintActive = !wlMintActive;
 	}
 
-	// Activate public sale
+	// Toggle public sales activity
 	function togglePubMintActive() public onlyOwner {
 		pubMintActive = !pubMintActive;
 	}
