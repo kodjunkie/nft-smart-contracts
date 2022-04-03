@@ -32,9 +32,6 @@ contract ERC721Whitelist is ERC721, Ownable {
 	uint256 private constant PUB_MAX_PER_WALLET = 4; // 3/wallet (uses < to save gas)
 	uint256 private constant PUB_MINT_PRICE = 0.065 ether;
 
-	// Track number of tokens per wallet
-	mapping(address => uint256) private mintedNFTs;
-
 	bool private _locked = false; // for re-entrancy guard
 
 	// Initializes the contract by setting a `name` and a `symbol`
@@ -49,10 +46,7 @@ contract ERC721Whitelist is ERC721, Ownable {
 		require(wlMintActive, "Whitelist sale is closed at the moment.");
 
 		address _to = msg.sender;
-		require(
-			_quantity > 0 && (mintedNFTs[_to] + _quantity) < WL_MAX_PER_WALLET,
-			"You cannot purchased more than the allowed limit."
-		);
+		require(_quantity > 0 && (balanceOf(_to) + _quantity) < WL_MAX_PER_WALLET, "Invalid mint quantity.");
 		require(whitelists[_to], "You're not whitelisted.");
 		require(msg.value >= (WL_MINT_PRICE * _quantity), "Not enough ETH.");
 
@@ -64,29 +58,24 @@ contract ERC721Whitelist is ERC721, Ownable {
 		require(pubMintActive, "Public sale is closed at the moment.");
 
 		address _to = msg.sender;
-		require(
-			_quantity > 0 && (mintedNFTs[_to] + _quantity) < PUB_MAX_PER_WALLET,
-			"You cannot purchased more than the allowed limit."
-		);
+		require(_quantity > 0 && (balanceOf(_to) + _quantity) < PUB_MAX_PER_WALLET, "Invalid mint quantity.");
 		require(msg.value >= (PUB_MINT_PRICE * _quantity), "Not enough ETH.");
 
 		mint(_to, _quantity);
 	}
 
 	/**
-	 * Admin mint
-	 * For promotions / collaborations
+	 * Airdrop for promotions & collaborations
 	 * You can remove this block if you don't need it
 	 */
-	function adminMint(uint256 _quantity) public onlyOwner {
-		mint(owner(), _quantity);
+	function airDropMint(address _to, uint256 _quantity) public onlyOwner {
+		require(_quantity > 0, "Invalid mint quantity.");
+		mint(_to, _quantity);
 	}
 
 	// Mint an NFT
 	function mint(address _to, uint256 _quantity) private {
 		require((_quantity + _supply.current()) <= MAX_SUPPLY, "Max supply exceeded.");
-
-		mintedNFTs[_to] = mintedNFTs[_to] + _quantity;
 
 		for (uint256 i = 0; i < _quantity; i++) {
 			_safeMint(_to, _supply.current());
@@ -95,13 +84,13 @@ contract ERC721Whitelist is ERC721, Ownable {
 	}
 
 	// Activate whitelist sale
-	function setWlMintActive() public onlyOwner {
-		wlMintActive = true;
+	function toggleWlMintActive() public onlyOwner {
+		wlMintActive = !wlMintActive;
 	}
 
 	// Activate public sale
-	function setPubMintActive() public onlyOwner {
-		pubMintActive = true;
+	function togglePubMintActive() public onlyOwner {
+		pubMintActive = !pubMintActive;
 	}
 
 	// Set whitelist
@@ -111,17 +100,12 @@ contract ERC721Whitelist is ERC721, Ownable {
 
 	// Get total supply
 	function totalSupply() public view returns (uint256) {
-		return _supply.current();
+		return _supply.current() - 1;
 	}
 
 	// Get whitelist
 	function isWhitelisted(address _address) public view returns (bool) {
 		return whitelists[_address];
-	}
-
-	// Get number of tokens by address
-	function getCountByAddress(address _address) public view returns (uint256) {
-		return mintedNFTs[_address];
 	}
 
 	// Base URI
@@ -149,8 +133,8 @@ contract ERC721Whitelist is ERC721, Ownable {
 				: "";
 	}
 
-	// Set reveal
-	function reveal() public onlyOwner {
+	// Activate reveal
+	function setReveal() public onlyOwner {
 		revealed = true;
 	}
 
