@@ -22,13 +22,13 @@ contract ERC721Whitelist is ERC721, Ownable {
 	uint256 private constant MAX_SUPPLY = 500;
 
 	// Whitelist mint constants
-	bool private wlMintActive = false;
+	bool public wlMintActive = false;
 	uint256 private constant WL_MAX_PER_WALLET = 3; // 2/wallet (uses < to save gas)
 	uint256 private constant WL_MINT_PRICE = 0.05 ether;
 	mapping(address => bool) private whitelists;
 
 	// Public mint constants
-	bool private pubMintActive = false;
+	bool public pubMintActive = false;
 	uint256 private constant PUB_MAX_PER_WALLET = 4; // 3/wallet (uses < to save gas)
 	uint256 private constant PUB_MINT_PRICE = 0.065 ether;
 
@@ -75,11 +75,17 @@ contract ERC721Whitelist is ERC721, Ownable {
 
 	// Mint an NFT
 	function mint(address _to, uint256 _quantity) private {
-		require((_quantity + _supply.current()) <= MAX_SUPPLY, "Max supply exceeded.");
+		/**
+		 * To save gas, since we know _quantity won't underflow / overflow
+		 * Checks are performed in caller functions / methods
+		 */
+		unchecked {
+			require((_quantity + _supply.current()) <= MAX_SUPPLY, "Max supply exceeded.");
 
-		for (uint256 i = 0; i < _quantity; i++) {
-			_safeMint(_to, _supply.current());
-			_supply.increment();
+			for (uint256 i = 0; i < _quantity; i++) {
+				_safeMint(_to, _supply.current());
+				_supply.increment();
+			}
 		}
 	}
 
