@@ -19,7 +19,7 @@ contract ERC721Whitelist is ERC721, Ownable {
 	string private notRevealedUri;
 
 	// Total supply
-	uint256 private constant MAX_SUPPLY = 500;
+	uint256 public constant MAX_SUPPLY = 500;
 
 	// Whitelist mint constants
 	bool public wlMintActive = false;
