@@ -156,7 +156,7 @@ contract ERC721Whitelist is ERC721, Ownable {
 		payable(owner()).transfer(address(this).balance);
 	}
 
-	// Receive any donation funds sent to the contract
+	// Receive any funds sent to the contract
 	receive() external payable {}
 
 	// Reentrancy guard modifier
