@@ -57,7 +57,7 @@ module.exports = {
 			websocket: true, // Enable EventEmitter interface for web3 (default: false)
 			provider: () =>
 				new HDWalletProvider({
-					mnemonic,
+					mnemonic: config.mnemonic,
 					providerOrUrl: `http://${config.host}:${config.port}`,
 					addressIndex: 0,
 				}),
