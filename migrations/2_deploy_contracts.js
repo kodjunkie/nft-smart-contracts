@@ -11,6 +11,8 @@ module.exports = async function (deployer) {
 	const baseUrl = "http://assets.example.com/";
 
 	// To deploy the whitelist supported contract
+	// Since it has reveal feature, you need to provide
+	// the URI to the "hidden.json" file as the third argument
 	deployer.deploy(ERC721Whitelist, baseUrl, `${baseUrl}hidden.json`);
 
 	// To deploy the simple contract
