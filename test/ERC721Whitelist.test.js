@@ -5,16 +5,22 @@ const BN = web3.utils.BN;
 
 contract("ERC721Whitelist", (accounts) => {
 	let instance;
-	const [deployer, whitelist, public] = accounts;
+	const gas = 300000;
+
+	// Test accounts
+	const [deployer, whitelistAcc, publicAcc, otherAcc] = accounts;
 
 	before(async () => {
 		instance = await ERC721Whitelist.deployed();
 	});
 
 	it("can add to whitelist", async () => {
-		expect(instance.isWhitelisted(whitelist)).to.eventually.be.false;
-		await instance.toggleWhitelist(whitelist, { from: deployer });
-		expect(instance.isWhitelisted(whitelist)).to.eventually.be.true;
+		// Make sure the whitelist account is not yet whitelisted
+		expect(instance.isWhitelisted(whitelistAcc)).to.eventually.be.false;
+		// Add whitelist account to whitelist :)
+		await instance.toggleWhitelist(whitelistAcc);
+		// Verify that the account is now whitelisted
+		expect(instance.isWhitelisted(whitelistAcc)).to.eventually.be.true;
 	});
 
 	it("can toggle sale state", async () => {
@@ -22,12 +28,25 @@ contract("ERC721Whitelist", (accounts) => {
 		expect(instance.wlMintActive()).to.eventually.be.false;
 		expect(instance.pubMintActive()).to.eventually.be.false;
 
-		// Toggle sale
-		await instance.toggleWlMintActive({ from: deployer });
-		await instance.togglePubMintActive({ from: deployer });
+		// Toggle sales
+		await instance.toggleWlMintActive(); // Whitelist sale
+		await instance.togglePubMintActive(); // Public sale
 
+		// Verification
 		expect(instance.wlMintActive()).to.eventually.be.true;
 		expect(instance.pubMintActive()).to.eventually.be.true;
+	});
+
+	it("should be able to perform airdrop mint", async () => {
+		const quantity = 1;
+		await instance.airDropMint(otherAcc, quantity, { gas });
+		expect(instance.balanceOf(otherAcc)).to.eventually.be.a.bignumber.equal(new BN(quantity));
+	});
+
+	it("ensures only whitelisted accounts can perform whitelist mint", () => {
+		expect(
+			instance.whitelistMint(1, { from: publicAcc, value: web3.utils.toWei("0.05", "ether"), gas })
+		).to.eventually.be.rejectedWith("You're not whitelisted.");
 	});
 
 	it("should be able to mint tokens", async () => {
@@ -35,33 +54,77 @@ contract("ERC721Whitelist", (accounts) => {
 
 		// Whitelist
 		await instance.whitelistMint(quantity, {
-			from: whitelist,
+			from: whitelistAcc,
 			value: web3.utils.toWei("0.1", "ether"),
-			gas: 300000,
+			gas,
 		});
-		expect(instance.balanceOf(whitelist)).to.eventually.be.a.bignumber.equal(new BN(quantity));
+		expect(instance.balanceOf(whitelistAcc)).to.eventually.be.a.bignumber.equal(new BN(quantity));
 
 		// Public mint
 		await instance.publicMint(quantity, {
-			from: public,
+			from: publicAcc,
 			value: web3.utils.toWei("0.13", "ether"),
-			gas: 300000,
+			gas,
 		});
-		expect(instance.balanceOf(public)).to.eventually.be.a.bignumber.equal(new BN(quantity));
+		expect(instance.balanceOf(publicAcc)).to.eventually.be.a.bignumber.equal(new BN(quantity));
 	});
 
-	it("throws when max allowed per wallet is exceeded", async () => {
+	it("throws when max allowed per wallet is exceeded", () => {
 		// Since the whitelisted account already minted 2 NFTs which is the max allowed
 		// lets try to mint an extra 1 to see if it passes
 		expect(
-			instance.whitelistMint(1, { from: whitelist, value: web3.utils.toWei("0.05", "ether"), gas: 300000 })
+			instance.whitelistMint(1, { from: whitelistAcc, value: web3.utils.toWei("0.05", "ether"), gas })
 		).to.eventually.be.rejectedWith("Invalid mint quantity.");
 
 		// Now for public mint
 		// We know the public mint account still has 1 mint left
 		// But let's try to mint 2 instead
 		expect(
-			instance.publicMint(2, { from: public, value: web3.utils.toWei("0.13", "ether"), gas: 300000 })
+			instance.publicMint(2, { from: publicAcc, value: web3.utils.toWei("0.13", "ether"), gas })
 		).to.eventually.be.rejectedWith("Invalid mint quantity.");
+	});
+
+	it("ensures mint quantity is properly validated", async () => {
+		// Let's try to mint a zero (0) quantity
+		expect(
+			instance.publicMint(0, { from: otherAcc, value: web3.utils.toWei("0.065", "ether"), gas })
+		).to.eventually.be.rejectedWith("Invalid mint quantity.");
+
+		// Let's mint more than the max per wallet limit of 3
+		expect(
+			instance.publicMint(4, { from: otherAcc, value: web3.utils.toWei("0.195", "ether"), gas })
+		).to.eventually.be.rejectedWith("Invalid mint quantity.");
+	});
+
+	it("should only accept full payment", () => {
+		const quantity = 1;
+
+		// Whitelist sale
+		expect(
+			instance.whitelistMint(quantity, { from: whitelistAcc, value: web3.utils.toWei("0.04", "ether"), gas })
+		).to.eventually.be.rejectedWith("Not enough ETH.");
+
+		// Public sale
+		expect(
+			instance.publicMint(quantity, { from: publicAcc, value: web3.utils.toWei("0.05", "ether"), gas })
+		).to.eventually.be.rejectedWith("Not enough ETH.");
+	});
+
+	it("ensures distribution is not more than the maximum supply", async () => {
+		// Aside initial mint for testing purpose
+		// let's try to mint 1 more than the maximum supply to make sure it passes
+		const quantity = (await instance.MAX_SUPPLY()) + 1;
+		expect(instance.airDropMint(otherAcc, quantity, { gas })).to.eventually.be.rejectedWith("Max supply exceeded.");
+	});
+
+	it("should be able to perform withdrawal of funds from the contract", async () => {
+		let initBalance = await web3.eth.getBalance(deployer);
+		instance.withdraw();
+
+		expect(web3.eth.getBalance(deployer)).to.eventually.be.a.bignumber.gt(new BN(initBalance));
+	});
+
+	after(() => {
+		instance = null;
 	});
 });

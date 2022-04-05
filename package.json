@@ -6,7 +6,7 @@
 		"test": "test"
 	},
 	"engines": {
-		"node": "16.x"
+		"node": ">=16.x"
 	},
 	"scripts": {
 		"prettier:sol": "prettier --write contracts/**/*.sol"
