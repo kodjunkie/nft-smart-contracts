@@ -1,5 +1,10 @@
 // SPDX-License-Identifier: MIT
 
+/**
+* Author: Lawrence Onah <paplow01@gmail.com>
+* Github: https://github.com/kodjunkie
+*/
+
 pragma solidity >=0.8.13 <0.9.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
