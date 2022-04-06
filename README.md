@@ -47,3 +47,7 @@ More deployment configurations can be added to the `networks` object in the `tru
 $ truffle develop
 > test
 ```
+
+## License
+
+This project is opened under the <a href="https://github.com/kodjunkie/nft-smart-contracts/blob/master/LICENSE" target="_blank">MIT 2.0 License</a> which allows very broad use for both academic and commercial purposes.
