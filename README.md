@@ -18,7 +18,6 @@ $ npm install
 
 ```bash
 $ truffle compile
-
 ```
 
 ## Deployment
