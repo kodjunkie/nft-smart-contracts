@@ -6,7 +6,7 @@ const ERC721Simple = artifacts.require("ERC721Simple");
  * Ensure to comment out redundant deployments
  * @param  {} deployer
  */
-module.exports = async function (deployer) {
+module.exports = function (deployer) {
 	// An ipfs:// or http(s):// URL to assets
 	const baseUrl = "http://assets.example.com/";
 
