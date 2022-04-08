@@ -11,9 +11,6 @@ module.exports = {
 	// HD Wallet Provider
 	mnemonic: env.MNEMONIC,
 
-	// Infura project IDs
-	infura: {
-		mainnet: env.INFURA_MAINNET,
-		rinkeby: env.INFURA_RINKEBY,
-	},
+	// Infura project ID
+	infura_project_id: env.INFURA_PROJECT_ID,
 };

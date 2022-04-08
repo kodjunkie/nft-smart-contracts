@@ -7,7 +7,8 @@
 		"avoid-suicide": "error",
 		"avoid-sha3": "warn",
 		"var-name-mixedcase": "off",
-		"no-empty-blocks": "off",
+		"no-empty-blocks": "warn",
+		"avoid-low-level-calls": "off",
 		"reason-string": ["warn", { "maxLength": 100 }],
 		"compiler-version": ["error", ">=0.8.13 <0.9.0"]
 	}

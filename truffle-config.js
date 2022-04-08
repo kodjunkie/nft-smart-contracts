@@ -74,7 +74,7 @@ module.exports = {
 			provider: () =>
 				new HDWalletProvider({
 					mnemonic: config.mnemonic,
-					providerOrUrl: `wss://rinkeby.infura.io/ws/v3/${config.infura.rinkeby}`,
+					providerOrUrl: `wss://rinkeby.infura.io/ws/v3/${config.infura_project_id}`,
 					addressIndex: 0,
 				}),
 			confirmations: 10,
