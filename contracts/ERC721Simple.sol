@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 
 /**
-* Author: Lawrence Onah <paplow01@gmail.com>
-* Github: https://github.com/kodjunkie
-*/
+ * Author: Lawrence Onah <paplow01@gmail.com>
+ * Github: https://github.com/kodjunkie
+ */
 
 pragma solidity >=0.8.13 <0.9.0;
 
@@ -37,7 +37,7 @@ contract ERC721Simple is ERC721, Ownable {
 	}
 
 	// Mint an NFT
-	function mint(uint256 _quantity) public payable nonReentrant {
+	function mint(uint256 _quantity) external payable nonReentrant {
 		require(saleActive, "Sale is closed at the moment.");
 
 		address _to = msg.sender;
@@ -98,7 +98,8 @@ contract ERC721Simple is ERC721, Ownable {
 	function withdraw() external onlyOwner {
 		// Transfer the remaining balance to the owner
 		// Do not remove this line, else you won't be able to withdraw the funds
-		payable(owner()).transfer(address(this).balance);
+		(bool sent, ) = payable(owner()).call{ value: address(this).balance }("");
+		require(sent, "Failed to withdraw Ether.");
 	}
 
 	// Receive any funds sent to the contract
