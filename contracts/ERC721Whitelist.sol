@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 
 /**
-* Author: Lawrence Onah <paplow01@gmail.com>
-* Github: https://github.com/kodjunkie
-*/
+ * Author: Lawrence Onah <paplow01@gmail.com>
+ * Github: https://github.com/kodjunkie
+ */
 
 pragma solidity >=0.8.13 <0.9.0;
 
@@ -47,7 +47,7 @@ contract ERC721Whitelist is ERC721, Ownable {
 	}
 
 	// Whitelist mint
-	function whitelistMint(uint256 _quantity) public payable nonReentrant {
+	function whitelistMint(uint256 _quantity) external payable nonReentrant {
 		require(wlMintActive, "Whitelist sale is closed at the moment.");
 
 		address _to = msg.sender;
@@ -59,7 +59,7 @@ contract ERC721Whitelist is ERC721, Ownable {
 	}
 
 	// Public mint
-	function publicMint(uint256 _quantity) public payable nonReentrant {
+	function publicMint(uint256 _quantity) external payable nonReentrant {
 		require(pubMintActive, "Public sale is closed at the moment.");
 
 		address _to = msg.sender;
@@ -73,7 +73,7 @@ contract ERC721Whitelist is ERC721, Ownable {
 	 * Airdrop for promotions & collaborations
 	 * You can remove this block if you don't need it
 	 */
-	function airDropMint(address _to, uint256 _quantity) public onlyOwner {
+	function airDropMint(address _to, uint256 _quantity) external onlyOwner {
 		require(_quantity > 0, "Invalid mint quantity.");
 		mint(_to, _quantity);
 	}
@@ -158,7 +158,8 @@ contract ERC721Whitelist is ERC721, Ownable {
 	function withdraw() external onlyOwner {
 		// Transfer the remaining balance to the owner
 		// Do not remove this line, else you won't be able to withdraw the funds
-		payable(owner()).transfer(address(this).balance);
+		(bool sent, ) = payable(owner()).call{ value: address(this).balance }("");
+		require(sent, "Failed to withdraw Ether.");
 	}
 
 	// Receive any funds sent to the contract
