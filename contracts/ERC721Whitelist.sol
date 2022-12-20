@@ -81,13 +81,13 @@ contract ERC721Whitelist is ERC721, Ownable {
 	// Mint an NFT
 	function mint(address _to, uint256 _quantity) private {
 		/**
-		 * To save gas, since we know _quantity won't underflow / overflow
+		 * To save gas, since we know _quantity won't overflow
 		 * Checks are performed in caller functions / methods
 		 */
 		unchecked {
 			require((_quantity + _supply.current()) <= MAX_SUPPLY, "Max supply exceeded.");
 
-			for (uint256 i = 0; i < _quantity; i++) {
+			for (uint256 i = 0; i < _quantity; ++i) {
 				_safeMint(_to, _supply.current());
 				_supply.increment();
 			}
