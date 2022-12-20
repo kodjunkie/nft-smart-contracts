@@ -1,16 +1,23 @@
 # NFT Smart Contracts
 
-Gas optimised NFT smart contracts.
+Gas optimized NFT smart contracts.
 
 ## Development
 
-You can easily copy and paste the contract into your existing project or to use this project, you must have [truffle](https://www.npmjs.com/package/truffle) installed globally on your machine.
+You can easily copy and paste the contract into your existing project or to clone this project.
 
 ```bash
-$ git clone https://github.com/kodjunkie/nft-smart-contracts.git
-$ cd nft-smart-contracts
-$ cp .env.example .env
-$ npm install
+# clone the repo
+git clone https://github.com/kodjunkie/nft-smart-contracts.git
+
+# navigate to the repo directory
+cd nft-smart-contracts
+
+# setup env
+cp .env.example .env
+
+# install dependencies
+npm install
 ```
 
 ## Compiling the contracts
@@ -18,7 +25,7 @@ $ npm install
 All compiled artifacts are located in the `builds` directory.
 
 ```bash
-$ truffle compile
+npm run compile
 ```
 
 ## Deployment
@@ -30,13 +37,16 @@ NOTE: If you intend to deploy directly via this project, you must follow the ins
 
 ```bash
 # deploy to truffle network
-$ truffle migrate
+npx truffle migrate
+
 # deploy to truffle network using third-party wallet via HDWalletProvider
-$ truffle migrate --network wallet
+npx truffle migrate --network wallet
+
 # deploy to truffle network using third-party wallet via Dashboard
-$ truffle migrate --network dashboard
+npx truffle migrate --network dashboard
+
 # deploy to rinkeby network via Infura
-$ truffle migrate --network rinkeby
+npx truffle migrate --network rinkeby
 ```
 
 More deployment configurations can be added to the `networks` object in the `truffle-config.js` file.
@@ -44,10 +54,9 @@ More deployment configurations can be added to the `networks` object in the `tru
 ## Tests
 
 ```bash
-$ truffle develop
-> test
+npm test
 ```
 
 ## License
 
-This project is opened under the <a href="https://github.com/kodjunkie/nft-smart-contracts/blob/master/LICENSE" target="_blank">MIT 2.0 License</a> which allows very broad use for both academic and commercial purposes.
+Copyright (c) 2022 <a href="https://github.com/kodjunkie/nft-smart-contracts/blob/master/LICENSE" target="_blank">MIT</a>, <a href="https://github.com/kodjunkie" target="_blank">Lawrence Onah</a>
