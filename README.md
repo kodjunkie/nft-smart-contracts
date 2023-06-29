@@ -1,6 +1,6 @@
-# NFT Smart Contracts
-
-Gas optimized NFT smart contracts.
+<h3 align="center">
+  ⛽ Gas optimised NFT smart contracts for EVM blockchains.
+</h3>
 
 ## Development
 
