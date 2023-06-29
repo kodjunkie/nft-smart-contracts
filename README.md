@@ -1,6 +1,6 @@
-<h3 align="center">
+<h1 align="center">
   ⛽ Gas optimised NFT smart contracts for EVM blockchains.
-</h3>
+</h1>
 
 ## Development
 
