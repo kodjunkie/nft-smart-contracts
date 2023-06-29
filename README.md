@@ -1,8 +1,8 @@
-# NFT Smart Contracts
+<h2 align="center">
+  ⛽ Gas optimised NFT smart contracts for EVM blockchains.
+</h2>
 
-Gas optimized NFT smart contracts.
-
-## Development
+### Development
 
 You can easily copy and paste the contract into your existing project or to clone this project.
 
@@ -20,7 +20,7 @@ cp .env.example .env
 npm install
 ```
 
-## Compiling the contracts
+### Compiling the contracts
 
 All compiled artifacts are located in the `builds` directory.
 
@@ -28,7 +28,7 @@ All compiled artifacts are located in the `builds` directory.
 npm run compile
 ```
 
-## Deployment
+### Deployment
 
 NOTE: If you intend to deploy directly via this project, you must follow the instructions below.
 
@@ -51,12 +51,12 @@ npx truffle migrate --network rinkeby
 
 More deployment configurations can be added to the `networks` object in the `truffle-config.js` file.
 
-## Tests
+### Tests
 
 ```bash
 npm test
 ```
 
-## License
+### License
 
-Copyright (c) 2022 <a href="https://github.com/kodjunkie/nft-smart-contracts/blob/master/LICENSE" target="_blank">MIT</a>, <a href="https://github.com/kodjunkie" target="_blank">Lawrence Onah</a>
+[MIT](./LICENSE) License © 2022 [Lawrence Onah](https://github.com/kodjunkie)
